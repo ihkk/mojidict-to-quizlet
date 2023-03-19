@@ -17,7 +17,7 @@ An easy script converts word list from [MojiDict](https://www.mojidict.com/) to 
     
     ![Output from MojiDict](./images/img1.png)
 
-    And you get a PDF with a random name. (that is `uQvGO4LfSr#KX815uZ3jg#0.pdf` in the demo)
+    And you will get a PDF file with a random name. (that is `uQvGO4LfSr#KX815uZ3jg#0.pdf` in the demo)
 
 2. Run the script using command window, and run the script.
 
