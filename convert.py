@@ -5,7 +5,7 @@ file_path = ""
 words = []
 
 if not file_path:
-    file_path = input("请输入待处理的pdf文件：").strip('"')
+    file_path = input("Enter your pdf path: ").strip('"')
 
 with pdfplumber.open(file_path) as pdf:
     pg_cnt = 0
@@ -24,6 +24,11 @@ with pdfplumber.open(file_path) as pdf:
 
 print(f"Wordlist Count: {len(words)}\n")
 
+if input("Reverse list? (y/n) (n for default): ") == "y":
+    words.reverse()
+
+print("\n")
+
 for word in words:
     # 重组单词和假名
     word[0] = word[0].replace("undefined", "")
@@ -36,3 +41,5 @@ for word in words:
     word[1] = word[1].replace("[", "（")
     word[1] = word[1].replace("]", "）")
     print(f"{word[0]}|{word[1]}")
+
+print("\n")
