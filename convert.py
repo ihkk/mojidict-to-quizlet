@@ -29,6 +29,7 @@ def same_kana(str1, str2):
 def main():
     file_path = ""
     words = []
+    delete_duplicate_kana = False
 
     if not file_path:
         file_path = input("Enter your pdf path: ").strip('"')
@@ -57,6 +58,9 @@ def main():
     if input("Reverse list? (y/n) (n for default): ") == "y":
         words.reverse()
 
+    if input("Delete duplicate kana? (y/n) (n for default): ") == "y":
+        delete_duplicate_kana = True
+
     print("\n")
 
     for word in words:
@@ -64,7 +68,7 @@ def main():
         word[0] = word[0].replace("undefined", "")
         word[0] = re.sub(" [◎①②③④⑤⑥⑦⑧⑨]*", "", word[0])
         kanji_kana_pair = re.findall(r"(.*?)\|(.*)", word[0])
-        if kanji_kana_pair:
+        if kanji_kana_pair and delete_duplicate_kana:
             kanji, kana = kanji_kana_pair[0]
             if kanji == kana or same_kana(kanji, kana):
                 word[0] = kanji
