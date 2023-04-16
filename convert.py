@@ -1,9 +1,6 @@
 import pdfplumber
 import re
 
-file_path = ""
-words = []
-
 
 def isKana(char):
     # \x00-\xff为半角字符，\x00-\xff全角字符，\u3000-\303F为符号，\u3040-\u309F为平假名，\u30a0-\u30ff为片假名，\uff00-\uffef为字符
@@ -29,51 +26,59 @@ def same_kana(str1, str2):
     return True
 
 
-if not file_path:
-    file_path = input("Enter your pdf path: ").strip('"')
+def main():
+    file_path = ""
+    words = []
 
-with pdfplumber.open(file_path) as pdf:
-    pg_cnt = 0
-    for page in pdf.pages:
-        pg_cnt += 1
-        lines = page.extract_text()
-        if pg_cnt == 1:
-            lines = lines.split('\n')[3:-1]
-        else:
-            lines = lines.split('\n')[1:-1]
-        # 清理错误行
-        for line in lines:
-            if line[0] == "|":
-                lines.remove(line)
-        # 添加字典对
-        for i in range(0, len(lines), 2):
-            # 从列表中获取当前两项
-            pair = [lines[i], lines[i + 1]]
-            # 将这对项添加到字典中
-            words.append(pair)
-print(f"Wordlist Count: {len(words)}\n")
+    if not file_path:
+        file_path = input("Enter your pdf path: ").strip('"')
 
-if input("Reverse list? (y/n) (n for default): ") == "y":
-    words.reverse()
+    with pdfplumber.open(file_path) as pdf:
+        pg_cnt = 0
+        for page in pdf.pages:
+            pg_cnt += 1
+            lines = page.extract_text()
+            if pg_cnt == 1:
+                lines = lines.split('\n')[3:-1]
+            else:
+                lines = lines.split('\n')[1:-1]
+            # 清理错误行
+            for line in lines:
+                if line[0] == "|":
+                    lines.remove(line)
+            # 添加字典对
+            for i in range(0, len(lines), 2):
+                # 从列表中获取当前两项
+                pair = [lines[i], lines[i + 1]]
+                # 将这对项添加到字典中
+                words.append(pair)
+    print(f"Wordlist Count: {len(words)}\n")
 
-print("\n")
+    if input("Reverse list? (y/n) (n for default): ") == "y":
+        words.reverse()
 
-for word in words:
-    # 重组单词和假名
-    word[0] = word[0].replace("undefined", "")
-    word[0] = re.sub(" [◎①②③④⑤⑥⑦⑧⑨]*", "", word[0])
-    kanji_kana_pair = re.findall(r"(.*?)\|(.*)", word[0])
-    if kanji_kana_pair:
-        kanji, kana = kanji_kana_pair[0]
-        if kanji == kana or same_kana(kanji, kana):
-            word[0] = kanji
-    word[0] = re.sub(r"(.*?)\|(.*)", r"\1（\2）", word[0])
-    # 去除释义里的括号
-    word[1] = re.sub(r"（.*）", "", word[1])
-    word[1] = re.sub(r"（.*$", "", word[1])
-    # 更改注释里的词性符号
-    word[1] = word[1].replace("[", "（")
-    word[1] = word[1].replace("]", "）")
-    print(f"{word[0]}|{word[1]}")
+    print("\n")
 
-print("\n")
+    for word in words:
+        # 重组单词和假名
+        word[0] = word[0].replace("undefined", "")
+        word[0] = re.sub(" [◎①②③④⑤⑥⑦⑧⑨]*", "", word[0])
+        kanji_kana_pair = re.findall(r"(.*?)\|(.*)", word[0])
+        if kanji_kana_pair:
+            kanji, kana = kanji_kana_pair[0]
+            if kanji == kana or same_kana(kanji, kana):
+                word[0] = kanji
+        word[0] = re.sub(r"(.*?)\|(.*)", r"\1（\2）", word[0])
+        # 去除释义里的括号
+        word[1] = re.sub(r"（.*）", "", word[1])
+        word[1] = re.sub(r"（.*$", "", word[1])
+        # 更改注释里的词性符号
+        word[1] = word[1].replace("[", "（")
+        word[1] = word[1].replace("]", "）")
+        print(f"{word[0]}|{word[1]}")
+
+    print("\n")
+
+
+if __name__ == '__main__':
+    main()
