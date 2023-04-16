@@ -1,7 +1,7 @@
 import pdfplumber
 import re
 
-file_path = "vogmO8fMnU#KX815uZ3jg#0.pdf"
+file_path = ""
 words = []
 
 
