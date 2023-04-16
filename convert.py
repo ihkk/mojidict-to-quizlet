@@ -1,8 +1,33 @@
 import pdfplumber
 import re
 
-file_path = ""
+file_path = "vogmO8fMnU#KX815uZ3jg#0.pdf"
 words = []
+
+
+def isKana(char):
+    # \x00-\xff为半角字符，\x00-\xff全角字符，\u3000-\303F为符号，\u3040-\u309F为平假名，\u30a0-\u30ff为片假名，\uff00-\uffef为字符
+    kana_c = re.compile(r'[\u3040-\u309F\u30A0-\u30FF]')
+    if kana_c.search(char):
+        return True
+    else:
+        return False
+
+
+def same_kana(str1, str2):
+    """
+    This function takes two strings as input and checks if str1 is the hiragana present of str2.
+    """
+    if len(str1) != len(str2):
+        return False
+    for char in str1:
+        if not isKana(char):
+            return False
+    for char in str2:
+        if not isKana(char):
+            return False
+    return True
+
 
 if not file_path:
     file_path = input("Enter your pdf path: ").strip('"')
@@ -18,7 +43,8 @@ with pdfplumber.open(file_path) as pdf:
             lines = lines.split('\n')[1:-1]
         # 清理错误行
         for line in lines:
-            if line[0] == "|": lines.remove(line)
+            if line[0] == "|":
+                lines.remove(line)
         # 添加字典对
         for i in range(0, len(lines), 2):
             # 从列表中获取当前两项
@@ -36,6 +62,11 @@ for word in words:
     # 重组单词和假名
     word[0] = word[0].replace("undefined", "")
     word[0] = re.sub(" [◎①②③④⑤⑥⑦⑧⑨]*", "", word[0])
+    kanji_kana_pair = re.findall(r"(.*?)\|(.*)", word[0])
+    if kanji_kana_pair:
+        kanji, kana = kanji_kana_pair[0]
+        if kanji == kana or same_kana(kanji, kana):
+            word[0] = kanji
     word[0] = re.sub(r"(.*?)\|(.*)", r"\1（\2）", word[0])
     # 去除释义里的括号
     word[1] = re.sub(r"（.*）", "", word[1])
