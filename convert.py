@@ -1,7 +1,7 @@
 import pdfplumber
 import re
 
-file_path = ""
+file_path = "vogmO8fMnU#KX815uZ3jg#0.pdf"
 words = []
 
 if not file_path:
@@ -16,12 +16,15 @@ with pdfplumber.open(file_path) as pdf:
             lines = lines.split('\n')[3:-1]
         else:
             lines = lines.split('\n')[1:-1]
+        # 清理错误行
+        for line in lines:
+            if line[0] == "|": lines.remove(line)
+        # 添加字典对
         for i in range(0, len(lines), 2):
             # 从列表中获取当前两项
             pair = [lines[i], lines[i + 1]]
             # 将这对项添加到字典中
             words.append(pair)
-
 print(f"Wordlist Count: {len(words)}\n")
 
 if input("Reverse list? (y/n) (n for default): ") == "y":
