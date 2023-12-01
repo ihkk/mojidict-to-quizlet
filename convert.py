@@ -1,5 +1,6 @@
 import pdfplumber
 import re
+import pyperclip
 
 
 def isKana(char):
@@ -54,7 +55,6 @@ def main():
             # 添加字典对
             for i in range(0, len(lines), 2):
                 # 从列表中获取当前两项
-                print(lines[i])
                 pair = [lines[i], lines[i + 1]]
                 # 将这对项添加到字典中
                 words.append(pair)
@@ -88,6 +88,10 @@ def main():
         print(f"{word[0]}|{word[1]}")
 
     print("\n")
+    
+    # 复制wordlist到剪贴板
+    pyperclip.copy("\n".join([f"{word[0]}|{word[1]}" for word in words]))
+    print("Copied to clipboard.")
 
 
 if __name__ == '__main__':
