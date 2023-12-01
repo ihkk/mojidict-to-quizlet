@@ -40,7 +40,11 @@ def main():
             pg_cnt += 1
             lines = page.extract_text()
             if pg_cnt == 1:
-                lines = lines.split('\n')[3:-1]
+                # 如果第三行不含"[]"，则删除4行
+                if not re.search(r"\|", lines.split('\n')[3]):
+                    lines = lines.split('\n')[4:-1]
+                else:
+                    lines = lines.split('\n')[3:-1]
             else:
                 lines = lines.split('\n')[1:-1]
             # 清理错误行
@@ -50,6 +54,7 @@ def main():
             # 添加字典对
             for i in range(0, len(lines), 2):
                 # 从列表中获取当前两项
+                print(lines[i])
                 pair = [lines[i], lines[i + 1]]
                 # 将这对项添加到字典中
                 words.append(pair)
@@ -58,8 +63,9 @@ def main():
     if input("Reverse list? (y/n) (n for default): ") == "y":
         words.reverse()
 
-    if input("Delete duplicate kana? (y/n) (n for default): ") == "y":
-        delete_duplicate_kana = True
+    delete_duplicate_kana = True
+    if input("Delete duplicate kana? (y/n) (y for default): ") == "n":
+        delete_duplicate_kana = False
 
     print("\n")
 
