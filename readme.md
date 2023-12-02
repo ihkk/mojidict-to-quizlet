@@ -4,10 +4,11 @@ An easy script converts word list from [MojiDict](https://www.mojidict.com/) to 
 
 ## Requirements
 - Python3
-- Package: `pdfplumber`
+- Packages:
 
     ```bash
     $ pip install pdfplumber
+    $ pip install pyperclip
     ```
 
 ## How to use
@@ -33,7 +34,7 @@ An easy script converts word list from [MojiDict](https://www.mojidict.com/) to 
     PS C:\Users\ihkkn\Desktop> python C:\Users\ihkkn\Desktop\convert.py
     Enter your pdf path: C:\Users\ihkkn\Desktop\uQvGO4LfSr#KX815uZ3jg#0.pdf
     Wordlist Count: 76
-
+    
     Reverse list? (y/n) (n for default): y
 
 
@@ -55,7 +56,7 @@ An easy script converts word list from [MojiDict](https://www.mojidict.com/) to 
 
     ![New Study Set in Quizlet](./images/img2.png)
 
-5. Paste in all the outputs from the script, and enter `|` for "Between term and definition".
+5. Paste in all the outputs from the script (copy will be done automatically), and enter `|` for "Between term and definition".
 
     ![Import to Quizlet](./images/img3.png)
 
